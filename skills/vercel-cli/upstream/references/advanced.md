@@ -48,6 +48,16 @@ vercel traces get req_1234567890 --open --view gantt               # specific da
 
 `--view` is only valid alongside `--open`.
 
+`vercel traces search` searches spans across the team, or one project with `--project`, newest first, from the last hour by default:
+
+```bash
+vercel traces search --environment production --status error --since 1h
+vercel traces search --query 'span.duration > 2000' --json
+vercel traces search --next <cursor> --json                         # continue from the summary's pagination.next
+```
+
+With `--json`, each span is a `{"type":"span","data":{...}}` line, and the output ends with a `summary` line (`recordsReturned`, `timeRange`, `pagination: { hasMore, next }`, `excludedIntervals`). Read spans under `.data`, for example `jq 'select(.type == "span") | .data.span.name'`. When more spans match, continue with `--next` instead of raising `--limit`; the cursor keeps the team, project, filters, and window, so only `--limit` can change. A request ID from search results or logs does not guarantee that `vercel traces get` can retrieve the trace; reuse the same `--scope` and `--project`.
+
 ## Other Commands
 
 - `vercel webhooks` — manage webhooks (create, ls, rm)
