@@ -72,7 +72,7 @@ vercel logs --next <cursor>                                         # continue a
 
 Filter with `--query` (KQL-inspired: `field:value`, `field:(a OR b)`, `field != value`, `field:*text*`, `AND`/`OR`/`NOT`, and numeric comparisons for requests). `vercel logs runtime --help` and `vercel logs requests --help` list the common fields. The `--level`, `--source`, `--status-code`, `--request-id`, `--search`, `--branch`, and `--expand` flags were removed; express them as query fields. Select a deployment with `--deployment`, not a positional argument. Without `--deployment` or `--environment`, logs cover every environment of the project. Only team-owned projects are supported. Older CLI versions use different flags; check `vercel logs --help` first.
 
-`--follow` no longer streams: it prints a deprecation warning and runs the bounded query. Set `--since` and `--until` to the affected window instead.
+Set `--since` and `--until` to the affected window.
 
 With `--json` (implied by `--non-interactive` and in agents), output is JSON Lines: one `{"type":"log"|"request","data":{...}}` line per record, optional `warning` lines, and a final `summary` line with `recordsReturned`, `timeRange`, `pagination: { hasMore, next }`, and `excludedIntervals`. Read fields under `.data`, for example `jq 'select(.type == "log") | .data.message'`. Before concluding that something did not happen, check `pagination.hasMore` and `excludedIntervals`. To read more, pass `pagination.next` to `--next` rather than raising `--limit` or widening the window; the cursor keeps the original target, filter, and window, and only `--limit` can change.
 
